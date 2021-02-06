@@ -22,30 +22,71 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
 
 import com.example.android.android_me.R;
+import com.example.android.android_me.data.AndroidImageAssets;
 
 // This activity will display a custom Android image composed of three body parts: head, body, and legs
 public class AndroidMeActivity extends AppCompatActivity {
 
     private final static String LOG_TAG = AndroidMeActivity.class.getSimpleName();
 
+    private BodyPartFragment mHeadFragment, mBodyFragment, mLegFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_android_me);
 
-        // Instance a BodyPartFragment.
-        BodyPartFragment headFragment = new BodyPartFragment();
-        BodyPartFragment bodyFragment = new BodyPartFragment();
-        BodyPartFragment legFragment = new BodyPartFragment();
 
-        // Request the fragment manager.
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        // Check for an existing saved instance state.
+        if (savedInstanceState == null) {
 
-        // Fragment transaction.
-        fragmentManager.beginTransaction()
-                .add(R.id.head_container, headFragment)
-                .add(R.id.body_container, bodyFragment)
-                .add(R.id.leg_container, legFragment)
-                .commit();
+            // If not grab the intent bundle.
+            Bundle intentBundle = getIntent().getExtras();
+
+            // Instance a BodyPartFragment.
+            mHeadFragment = new BodyPartFragment();
+            mBodyFragment = new BodyPartFragment();
+            mLegFragment = new BodyPartFragment();
+
+            // Set the image lists.
+            mHeadFragment.setmImageIds(AndroidImageAssets.getHeads());
+            mBodyFragment.setmImageIds(AndroidImageAssets.getBodies());
+            mLegFragment.setmImageIds(AndroidImageAssets.getLegs());
+
+            // Grab the data out of the intent bundle...
+            int headInt = intentBundle.getInt("headIndex");
+            int bodyInt = intentBundle.getInt("bodyIndex");
+            int legInt = intentBundle.getInt("legIndex");
+
+            // Initialize the list index according to the intent.
+            mHeadFragment.setmListIndex(headInt);
+            mBodyFragment.setmListIndex(bodyInt);
+            mLegFragment.setmListIndex(legInt);
+
+            // Request the fragment manager.
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            // Fragment transaction.
+            fragmentManager.beginTransaction()
+                    .add(R.id.head_container, mHeadFragment)
+                    .add(R.id.body_container, mBodyFragment)
+                    .add(R.id.leg_container, mLegFragment)
+                    .commit();
+        }
+    }
+    public void setFragmentImage(int fragmentType, int imageNumber) {
+        switch(fragmentType) {
+            case 0:
+                mHeadFragment.setmListIndex(imageNumber);
+                break;
+            case 1:
+                mBodyFragment.setmListIndex(imageNumber);
+                break;
+            case 2:
+                mLegFragment.setmListIndex(imageNumber);
+                break;
+            default:
+                break;
+        }
     }
 }

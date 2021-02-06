@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Android_Me</string>
+    <string name="image_view_content_description">Android Body Part</string>
+    <string name="next_button">Next</string>
 </resources>
