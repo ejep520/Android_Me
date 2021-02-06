@@ -70,10 +70,8 @@ public class BodyPartFragment extends Fragment {
     }
 
     public void setmListIndex(int mListIndex) {
-        if ((mImageIds != null) && (mListIndex < mImageIds.size()) && (mListIndex >= 0)) {
+        if (mListIndex >= 0) {
             this.mListIndex = mListIndex;
-        } else if (mImageIds == null) {
-            Log.d(LOG_TAG, "The image id list has not been set.");
         } else {
             Log.d(LOG_TAG, "An invalid list index was detected.");
         }
